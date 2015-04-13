@@ -1,0 +1,36 @@
+{
+  "name": "leap-mqtt",
+  "version": "1.0.10",
+  "description": "This is a nodejs module for grasping gesture data from LeapMotion devices,and then send these data to mqtt servers.",
+  "main": "index.js",
+  "dependencies": {
+    "leapjs": "^0.6.4",
+    "mqtt": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JumpYD/leap-mqtt.git"
+  },
+  "keywords": [
+    "leap",
+    "mqtt"
+  ],
+  "author": {
+    "name": "Gavin.Xu"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JumpYD/leap-mqtt/issues"
+  },
+  "homepage": "https://github.com/JumpYD/leap-mqtt",
+  "readme": "# What's  leap-mqtt\n======\n\n  This is a nodejs module for grasping gesture data from LeapMotion devices,and then send these data to mqtt servers。\n  \n## Install\n```bash\n$ npm install leap-mqtt\n```\n  \n## Useage\n```js\nvar LM=require('leap-mqtt');\n\tLeap2Mqtt=LM.LeapMqtt;\nvar client = LM.getClient('mqtt://MQTTSERVER:PORT');\nvar controller = LM.getController();\n\tcontroller.connect();\nLeap2Mqtt.sendgesture(client,controller,'LEAP');\n\n```\n\n```js\nvar LM=require('leap-mqtt');\nvar client2 = LM.getClient('mqtt://MQTTSERVER:PORT');\n\tclient2.subscribe('LEAP');\nclient2.on('message', function (topic, data) {\n        var json = data.toString().split('|');\n        if (json[0] == '00') {\n            console.log(JSON.parse(json[2]));\n        } else if (json[0] == '01') {\n            console.log('streamingStarted');\n        } else if (json[0] == '02') {\n            console.log('streamingStopped');\n        }\n})\n```\n",
+  "readmeFilename": "README.md",
+  "gitHead": "4207d09ab2be15452f9510cc0ba554217bc77849",
+  "_id": "leap-mqtt@1.0.7",
+  "_shasum": "568c23fc130796396f4859b0bb127f0136ac01aa",
+  "_from": "leap-mqtt@*"
+}
