@@ -1,6 +1,6 @@
 {
   "name": "leap-mqtt",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "This is a nodejs module for grasping gesture data from LeapMotion devices,and then send these data to mqtt servers.",
   "main": "index.js",
   "dependencies": {
@@ -27,10 +27,10 @@
     "url": "https://github.com/JumpYD/leap-mqtt/issues"
   },
   "homepage": "https://github.com/JumpYD/leap-mqtt",
-  "readme": "# What's  leap-mqtt\n======\n\n  This is a nodejs module for grasping gesture data from LeapMotion devices,and then send these data to mqtt servers。\n  \n## Install\n```bash\n$ npm install leap-mqtt\n```\n  \n## Useage\n```js\nvar LM=require('leap-mqtt');\n\tLeap2Mqtt=LM.LeapMqtt;\nvar client = LM.getClient('mqtt://MQTTSERVER:PORT');\nvar controller = LM.getController();\n\tcontroller.connect();\nLeap2Mqtt.sendgesture(client,controller,'LEAP');\n\n```\n\n```js\nvar LM=require('leap-mqtt');\nvar client2 = LM.getClient('mqtt://MQTTSERVER:PORT');\n\tclient2.subscribe('LEAP');\nclient2.on('message', function (topic, data) {\n        var json = data.toString().split('|');\n        if (json[0] == '00') {\n            console.log(JSON.parse(json[2]));\n        } else if (json[0] == '01') {\n            console.log('streamingStarted');\n        } else if (json[0] == '02') {\n            console.log('streamingStopped');\n        }\n})\n```\n",
+  "readme": "# What's  leap-mqtt\r\n======\r\n\r\n  This is a nodejs module for grasping gesture data from LeapMotion devices,and then send these data to mqtt servers。\r\n  \r\n## Install\r\n```bash\r\n$ npm install leap-mqtt\r\n```\r\n  \r\n## Useage\r\n```js\r\nvar LM=require('leap-mqtt');\r\n    Leap2Mqtt=LM.LeapMqtt;\r\nvar option={\r\n  username:'username',\r\n  password:'password'\r\n}\r\nvar client = LM.getClient('mqtt://MQTTSERVER:PORT',option);\r\nvar controller = LM.getController();\r\n    controller.connect();\r\nclient.on('connect',function(err,data){\r\n    Leap2Mqtt.sendgesture(client,controller,'LEAP');\r\n})\r\n\r\n```\r\n\r\n```js\r\nvar LM=require('leap-mqtt');\r\nvar option={\r\n  username:'username',\r\n  password:'password'\r\n}\r\nvar client2 = LM.getClient('mqtt://MQTTSERVER:PORT',option);\r\nclient2.on('connect',function(err,data){\r\n    client2.subscribe('LEAP');\r\n});\r\nclient2.on('message', function (topic, data) {\r\n        console.log(data.toString());\r\n})\r\n```",
   "readmeFilename": "README.md",
-  "gitHead": "4207d09ab2be15452f9510cc0ba554217bc77849",
-  "_id": "leap-mqtt@1.0.7",
-  "_shasum": "568c23fc130796396f4859b0bb127f0136ac01aa",
+  "gitHead": "8c28b03aa2da454cdad994ea9b836993dc3d4109",
+  "_id": "leap-mqtt@1.0.11",
+  "_shasum": "ff8ec8d43865d215a5fc211220fdbe201ae94695",
   "_from": "leap-mqtt@*"
 }

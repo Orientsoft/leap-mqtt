@@ -1,4 +1,4 @@
-exports.sendgesture = function (client,controller,topic) {
+exports.sendgesture = function (client,controller,channel) {
     var pretimestamp = null,
         pregesture = null;
     controller.on("frame", function (frame) {
@@ -9,12 +9,11 @@ exports.sendgesture = function (client,controller,topic) {
                     if (pretimestamp == null && pregesture == null) {
                         pretimestamp = frame.timestamp;
                         pregesture = frame.data.gestures[i].type;
-                        client.publish(topic,'{"name":"' + dev + '","dev":"leap","time":"' + frame.timestamp + '","type":"gesture","gesture":{"name":"' + frame.data.gestures[i].type + '","edge":"' + frame.data.gestures[i].state + '"}}');
-                    } else if(parseFloat(frame.timestamp) - parseFloat(pretimestamp) < 500000 ){
-                        pretimestamp = frame.timestamp;
-                        pregesture = frame.data.gestures[i].type;
-                    } else if (pregesture !== frame.data.gestures[i].type || parseFloat(frame.timestamp) - parseFloat(pretimestamp) > 2000000 || frame.data.gestures[i].state == 'stop') {
-                        client.publish(topic, '{"name":"' + dev + '","dev":"leap","time":"' + frame.timestamp + '","type":"gesture","gesture":{"name":"' + frame.data.gestures[i].type + '","edge":"' + frame.data.gestures[i].state + '"}}');
+                        client.publish(channel, '00||' + '{"name":"' + dev + '","dev":"leap","time":"' + frame.timestamp + '","type":"gesture","gesture":{"name":"' + frame.data.gestures[i].type + '","edge":"' + frame.data.gestures[i].state + '"}}');
+                        //console.log('00||' + '{"name":"' + dev + '","dev":"leap","time":"' + frame.timestamp + '","type":"gesture","gesture":{"name":"' + frame.data.gestures[i].type + '","edge":"' + frame.data.gestures[i].state + '"}}');
+                    } else if (pregesture !== frame.data.gestures[i].type || parseFloat(frame.timestamp) - parseFloat(pretimestamp) > 1000000 || frame.data.gestures[i].state == 'stop') {
+                        client.publish(channel, '00||' + '{"name":"' + dev + '","dev":"leap","time":"' + frame.timestamp + '","type":"gesture","gesture":{"name":"' + frame.data.gestures[i].type + '","edge":"' + frame.data.gestures[i].state + '"}}');
+                        //console.log('00||' + '{"name":"' + dev + '","dev":"leap","time":"' + frame.timestamp + '","type":"gesture","gesture":{"name":"' + frame.data.gestures[i].type + '","edge":"' + frame.data.gestures[i].state + '"}}');
                         pretimestamp = frame.timestamp;
                         pregesture = frame.data.gestures[i].type;
                     } else {
@@ -27,9 +26,11 @@ exports.sendgesture = function (client,controller,topic) {
         }
     });
     controller.on('streamingStarted', function () {
-         client.publish(topic, '{"name":"LEAPMOTION","dev":"leap","time":null,"type":"gesture","gesture":{"name":"devicein","edge":"start"}}');
+        client.publish(channel, '01||' + 'streamingStarted');
+        //console.log("streamingStarted");
     });
     controller.on('streamingStopped', function () {
-        client.publish(topic, '{"name":"LEAPMOTION","dev":"leap","time":null,"type":"gesture","gesture":{"name":"deviceout","edge":"stop"}}');
+        client.publish(channel, '02||' + 'streamingStopped');
+        //console.log("streamingStopped");
     });
 }
